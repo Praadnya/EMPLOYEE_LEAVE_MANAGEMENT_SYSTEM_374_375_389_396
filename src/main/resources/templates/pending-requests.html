@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pending Leave Requests</title>
+    <style>
+        /* Styles for logout button */
+        .logout-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .logout-button {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Table styles */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px; /* Added margin between buttons and table */
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Button styles */
+        .button-container {
+            margin-top: 20px;
+        }
+        .button-container a {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .button-container a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logout Button -->
+    <div class="logout-container">
+        <form action="/logout" method="post">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+
+    <!-- Button Container -->
+    <div class="button-container">
+        <a href="/employee/create-request">Create New Request</a>
+        <a href="/employee/leave-history">View Leave History</a>
+    </div>
+
+    <h2>Pending Leave Requests</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Department Name</th>
+                <th>Type</th>
+                <th>Reason</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="request : ${pendingRequests}">
+                <td th:text="${request.reqID}">Request ID</td>
+                <td th:text="${request.deptName}">Department Name</td>
+                <td th:text="${request.type}">Type</td>
+                <td th:text="${request.reason}">Reason</td>
+                <td th:text="${request.startDate}">Start Date</td>
+                <td th:text="${request.endDate}">End Date</td>
+                <td th:text="${request.status}">Status</td>
+                <td>
+                    <form action="#" th:action="@{/employee/cancel-request/{requestId}(requestId=${request.reqID})}" method="post">
+                        <button type="submit">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

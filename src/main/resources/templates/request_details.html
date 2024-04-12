@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Request Details</h1>
+    <table>
+        <tr>
+            <th>Request ID</th>
+            <td th:text="${request.reqID}">-</td>
+        </tr>
+        <tr>
+            <th>Employee ID</th>
+            <td th:text="${request.employee.empID}">-</td>
+        </tr>
+        <tr>
+            <th>Department Name</th>
+            <td th:text="${request.deptName}">-</td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td th:text="${request.type}">-</td>
+        </tr>
+        <tr>
+            <th>Reason</th>
+            <td th:text="${request.reason}">-</td>
+        </tr>
+        <tr>
+            <th>Start Date</th>
+            <td th:text="${request.startDate}">-</td>
+        </tr>
+        <tr>
+            <th>End Date</th>
+            <td th:text="${request.endDate}">-</td>
+        </tr>
+    </table>
+    <h2>Add Comments</h2>
+    <form th:action="@{/manager/request/{reqId}/approve(reqId=${request.reqID})}" method="post">
+        <textarea name="comments" rows="4" cols="50" placeholder="Enter comments for approval"></textarea><br>
+        <button type="submit">Approve</button>
+    </form>
+    <form th:action="@{/manager/request/{reqId}/deny(reqId=${request.reqID})}" method="post">
+        <textarea name="comments" rows="4" cols="50" placeholder="Enter comments for denial"></textarea><br>
+        <button type="submit">Deny</button>
+    </form>
+</body>
+</html>
