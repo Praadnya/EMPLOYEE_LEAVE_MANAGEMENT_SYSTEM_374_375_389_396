@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Leave Request</title>
+    <style>
+		.logout-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .logout-button {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+        form {
+            margin-bottom: 20px; /* Added margin at the bottom of the form */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px; /* Added margin between labels and input fields */
+        }
+        input[type="text"],
+        input[type="date"] {
+            width: 40%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            margin-bottom: 10px; /* Added margin between input fields */
+        }
+        button[type="submit"],
+        .back-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+        }
+        button[type="submit"]:hover,
+        .back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+	<div class="logout-container">
+        <form action="/logout" method="post">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+    <h2>Create Leave Request</h2>
+    <form action="#" th:action="@{/employee/create-request}" th:object="${leaveRequest}" method="post">
+        <input type="hidden" th:field="*{employee}" value="${leaveRequest.employee}" />
+        <div>
+            <label for="departmentName">Department Name:</label>
+            <input type="text" id="departmentName" name="deptName" th:value="${departmentName}" readonly="readonly" />
+        </div>
+        <div>
+            <label for="type">Type:</label>
+            <input type="text" id="type" name="type" th:field="*{type}" required />
+        </div>
+        <div>
+            <label for="reason">Reason:</label>
+            <input type="text" id="reason" name="reason" th:field="*{reason}" required />
+        </div>
+        <div>
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required />
+        </div>
+        <div>
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required />
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <a href="/employee/pending-requests" class="back-button">Back to Pending Requests</a>
+</body>
+</html>
