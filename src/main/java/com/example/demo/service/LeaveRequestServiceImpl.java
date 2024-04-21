@@ -6,10 +6,14 @@ import com.example.demo.entity.DepartmentEnum;
 import com.example.demo.entity.Employee;
 import com.example.demo.entity.LeaveHistory;
 import com.example.demo.entity.LeaveStatus;
+import com.example.demo.factory.LeaveFactory;
+import com.example.demo.repo.LeaveBalanceRepository;
 import com.example.demo.repo.LeaveHistoryRepository;
 import com.example.demo.repo.LeaveRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +25,9 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     
     @Autowired
     private LeaveHistoryRepository leaveHistoryRepository;
+
+    @Autowired
+    private LeaveBalanceRepository leaveBalanceRepository;
     
     @Override
     public List<LeaveRequest> getPendingRequests(Employee employee) {
@@ -73,17 +80,37 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         Optional<LeaveRequest> optionalRequest = leaveRequestRepository.findById(requestId);
         if (optionalRequest.isPresent()) {
             LeaveRequest request = optionalRequest.get();
-            request.setStatus(LeaveStatus.APPROVED);
-            leaveRequestRepository.save(request);
-
-            // Save the comments in LeaveHistory
             LeaveHistory history = new LeaveHistory();
+            Date start=request.getStartDate();
+            Date end=request.getEndDate();
+            long difference_In_Time= end.getTime() - start.getTime();
+            long difference_In_Days= (difference_In_Time/ (1000 * 60 * 60 * 24)) % 365;
+            int days=(int)difference_In_Days;
+            String type=request.getType();
+            LeaveFactory leaveFactory=new LeaveFactory(leaveBalanceRepository);
+            Employee employee=request.getEmployee();
+            LeaveTypeService leaveType=leaveFactory.applyLeave(employee,days,type);
+            String reply=leaveType.changeLeaveBalance(employee, days);
+            if(reply.equalsIgnoreCase("valid"))
+            {
+                request.setStatus(LeaveStatus.APPROVED);
+                leaveRequestRepository.save(request);
+                
+                 // Save the comments in LeaveHistory
+                 
+                 history.setLeaveRequest(request);
+                 history.setEmployee(request.getEmployee());
+                 history.setComments(comments);
+                 leaveHistoryRepository.save(history);
+                 return request;
+            }
+            request.setStatus(LeaveStatus.DENIED);
+            leaveRequestRepository.save(request);
+            // Save the comments in LeaveHistory
             history.setLeaveRequest(request);
             history.setEmployee(request.getEmployee());
             history.setComments(comments);
             leaveHistoryRepository.save(history);
-
-            return request;
         }
         return null;
     }
