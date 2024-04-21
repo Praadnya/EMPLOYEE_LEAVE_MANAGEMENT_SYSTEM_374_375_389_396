@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Balance</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px; /* Added margin between buttons and table */
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+
+    </style>
+</head>
+<body>
+    <h2>Current Leave Balance</h2>
+    <br>
+    <table>
+        <tr>
+            <th>Sick Leave</th>
+            <th>Annual Leave</th>
+        </tr>
+        <tr th:each="balance:${leaveBalance}">
+            <td th:text="${balance.sick_leave}">-</td>
+            <td th:text="${balance.annual_leave}">-</td>
+        </tr>
+    </table>
+</body>
+</html>
