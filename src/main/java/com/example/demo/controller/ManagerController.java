@@ -42,7 +42,7 @@ public class ManagerController {
 
         // Retrieve all pending leave requests for the manager's department
         List<LeaveRequest> pendingRequests = leaveRequestService.getPendingRequestsByDepartment(managerDepartment);
-
+        System.out.println("abs:"+pendingRequests);
         model.addAttribute("pendingRequests", pendingRequests);
         return "manager_dashboard";
     }

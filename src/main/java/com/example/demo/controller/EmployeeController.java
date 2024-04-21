@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LeaveRequestDto;
 import com.example.demo.entity.Employee;
+import com.example.demo.entity.LeaveBalance;
 import com.example.demo.entity.LeaveHistory;
 import com.example.demo.entity.LeaveRequest;
 import com.example.demo.entity.LeaveStatus;
@@ -9,6 +10,7 @@ import com.example.demo.factory.LeaveRequestFactory;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.LeaveHistoryService;
 import com.example.demo.service.LeaveRequestService;
+import com.example.demo.service.LeaveBalanceService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,15 +26,18 @@ public class EmployeeController {
 
     private final EmployeeService employeeService;
     private final LeaveRequestService leaveRequestService;
+    
     @Autowired
     private final LeaveHistoryService leaveHistoryService;
     private final LeaveRequestFactory leaveRequestFactory;
+    private final LeaveBalanceService leaveBalanceService;
 
-    public EmployeeController(EmployeeService employeeService, LeaveRequestService leaveRequestService, LeaveHistoryService leaveHistoryService, LeaveRequestFactory leaveRequestFactory) {
+    public EmployeeController(EmployeeService employeeService, LeaveRequestService leaveRequestService, LeaveHistoryService leaveHistoryService, LeaveRequestFactory leaveRequestFactory,LeaveBalanceService leaveBalanceService) {
         this.employeeService = employeeService;
         this.leaveRequestService = leaveRequestService;
         this.leaveHistoryService = leaveHistoryService;
         this.leaveRequestFactory = leaveRequestFactory;
+        this.leaveBalanceService=leaveBalanceService;
     }
     @GetMapping("/pending-requests")
     public String getPendingRequests(Model model) {
@@ -90,5 +95,14 @@ public class EmployeeController {
     public String cancelLeaveRequest(@PathVariable int requestId) {
         leaveRequestService.cancelLeaveRequest(requestId);
         return "redirect:/employee/pending-requests";
+    }
+
+    @GetMapping("/leave-balance")
+    public String getLeaveBalance(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Employee loggedInEmployee = employeeService.findByUsername(username);
+        List<LeaveBalance> leaveBalanceList = leaveBalanceService.getAllLeaveBalances(loggedInEmployee);
+        model.addAttribute("leaveBalance" ,leaveBalanceList);
+        return "leave-balance";
     }
 }
