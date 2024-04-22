@@ -40,10 +40,33 @@
             text-align: right;
             padding: 10px;
         }
+        
         .logout-button {
             background-color: #f44336;
             color: white;
             padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .view-button {
+            background-color: #f44336;
+            color: white;
+            margin-top: 100px;
+            text-align: left;
+            padding: 15px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .generate-button {
+            background-color: #f44336;
+            color: white;
+            margin-top: 30px;
+            text-align: left;
+            padding: 7px 7px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -82,6 +105,13 @@
                 </tr>
             </tbody>
         </table>
+        <form action="#" th:action="@{/manager/generate-report}" method="post" class="generate-form">
+            <input type="text" name="username" placeholder="user1"/>
+            <button type="submit" class="generate-button">Generate</button>
+        </form>
+        <div class="view-container">
+            <a href="/manager/leave-history" class="view-button">View Leave History</a>
+        </div>
     </div>
 </body>
 </html>

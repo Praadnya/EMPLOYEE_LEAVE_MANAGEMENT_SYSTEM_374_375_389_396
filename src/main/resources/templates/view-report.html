@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Leave History</title>
+    <style>
+		.logout-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .logout-button {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* Added margin between table and button */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .back-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+	<div class="logout-container">
+        <form action="/logout" method="post">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+    <h2>Leave History</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Department Name</th>
+                <th>Type</th>
+                <th>Reason</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="history : ${leaveHistory}">
+                <td th:text="${history.leaveRequest.reqID}">-</td>
+                <td th:text="${history.leaveRequest.deptName}">-</td>
+                <td th:text="${history.leaveRequest.type}">-</td>
+                <td th:text="${history.leaveRequest.reason}">-</td>
+                <td th:text="${#dates.format(history.leaveRequest.startDate, 'yyyy-MM-dd')}">-</td>
+                <td th:text="${#dates.format(history.leaveRequest.endDate, 'yyyy-MM-dd')}">-</td>
+                <td th:text="${history.leaveRequest.status}">-</td>
+                <td th:text="${history.comments}">-</td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Current Leave Balance</h2>
+    <br>
+    <table>
+        <tr>
+            <th>Sick Leave</th>
+            <th>Annual Leave</th>
+        </tr>
+        <tr th:each="balance:${leaveBalance}">
+            <td th:text="${balance.sick_leave}">-</td>
+            <td th:text="${balance.annual_leave}">-</td>
+        </tr>
+    </table>
+    <a href="/manager/" class="back-button">Back to Dashboard</a>
+</body>
+</html>
