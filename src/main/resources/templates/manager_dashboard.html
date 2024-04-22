@@ -53,7 +53,6 @@
         .view-button {
             background-color: #f44336;
             color: white;
-            margin-top: 100px;
             text-align: left;
             padding: 15px 15px;
             border: none;
@@ -106,9 +105,10 @@
             </tbody>
         </table>
         <form action="#" th:action="@{/manager/generate-report}" method="post" class="generate-form">
-            <input type="text" name="username" placeholder="user1"/>
+            <input type="text" name="username"/>
             <button type="submit" class="generate-button">Generate</button>
         </form>
+        <br/><br/>
         <div class="view-container">
             <a href="/manager/leave-history" class="view-button">View Leave History</a>
         </div>
